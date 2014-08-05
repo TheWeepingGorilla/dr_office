@@ -34,7 +34,8 @@ class Specialty
       doctor_name = result["name"]
       doctor_id = result["id"].to_i
       doctor_specialty_id = result["specialty_id"].to_i
-      current_doctor = Doctor.new(doctor_name, doctor_specialty_id, doctor_id)
+      doctor_insurance_id = result["insurance_id"].to_i
+      current_doctor = Doctor.new(doctor_name, doctor_specialty_id, doctor_insurance_id, doctor_id)
       doctors << current_doctor
     end
     doctors

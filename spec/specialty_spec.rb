@@ -4,6 +4,7 @@ require 'specialty'
 
 DB = PG.connect({:dbname => 'doctors_office_tools'})
 
+
 RSpec.configure do |config|
   config.after(:each) do
     DB.exec("DELETE FROM specialties *;")
@@ -35,7 +36,9 @@ describe Specialty do
   it 'should return all doctors with a given specialty_id' do
     dermatology = Specialty.new("dermatology")
     dermatology.save
-    dermatologist = Doctor.new("Dr. Bob", dermatology.id)
+    redshield = Insurance.new("Red Shield")
+    redshield.save
+    dermatologist = Doctor.new("Dr. Bob", dermatology.id, redshield.id)
     dermatologist.save
     expect(dermatology.get_doctors).to eq [dermatologist]
   end

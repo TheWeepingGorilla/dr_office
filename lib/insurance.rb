@@ -11,8 +11,9 @@ class Insurance
     companies =[]
     results = DB.exec("SELECT * FROM insurance_companies;")
     results.each do |result|
+      current_id = result["id"]
       current_name = result["name"]
-      current_company = Insurance.new(current_name)
+      current_company = Insurance.new(current_name, current_id)
       companies << current_company
     end
     companies
