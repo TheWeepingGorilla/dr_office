@@ -1,14 +1,16 @@
 class Doctor
 
-  attr_accessor :name, :specialty_id
+  attr_accessor :name, :specialty_id, :id
 
-  def initialize(name, specialty_id)
+  def initialize(name, specialty_id, id=nil)
     @name = name
     @specialty_id = specialty_id
+    @id = id
   end
 
   def save
-    DB.exec("INSERT INTO doctors (name,specialty_id) VALUES ('#{@name}','#{@specialty_id}');")
+    results = DB.exec("INSERT INTO doctors (name,specialty_id) VALUES ('#{@name}','#{@specialty_id}') RETURNING id;")
+    @id = results.first['id'].to_i
   end
 
   def self.all

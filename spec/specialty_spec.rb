@@ -31,5 +31,13 @@ describe Specialty do
     dermatology.save
     expect(Specialty.all).to eq [dermatology]
   end
+
+  it 'should return all doctors with a given specialty_id' do
+    dermatology = Specialty.new("dermatology")
+    dermatology.save
+    dermatologist = Doctor.new("Dr. Bob", dermatology.id)
+    dermatologist.save
+    expect(dermatology.get_doctors).to eq [dermatologist]
+  end
 end
 
