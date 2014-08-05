@@ -1,9 +1,10 @@
 class Patient
-  attr_accessor :name,:birthday
+  attr_accessor :name,:birthday,:id
 
-  def initialize(name,birthday)
+  def initialize(name,birthday,id=nil)
     @name = name
     @birthday = birthday
+    @id = id
   end
 
   def self.all
@@ -20,11 +21,24 @@ class Patient
   end
 
   def save
-    DB.exec("INSERT INTO patients (name, birthday) VALUES ('#{@name}', '#{@birthday}');")
+    results = DB.exec("INSERT INTO patients (name, birthday) VALUES ('#{@name}', '#{@birthday}') RETURNING id;")
+    @id = results.first['id'].to_i
   end
 
   def ==(another_patient)
     (@name == another_patient.name) && (@birthday == another_patient.birthday)
   end
 
+  def assign(doctor_id)
+    DB.exec("INSERT INTO patients_doctors (doctor_id, patient_id) VALUES (#{doctor_id},#{@id});")
+  end
+
+  def which_doctors?
+    doctors = []
+    results = DB.exec("SELECT * FROM patients_doctors WHERE patient_id = #{@id};")
+    results.each do |patient_doctor|
+      doctors << patient_doctor["doctor_id"].to_i
+    end
+    doctors
+  end
 end

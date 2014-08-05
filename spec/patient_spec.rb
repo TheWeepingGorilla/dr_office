@@ -9,6 +9,7 @@ DB = PG.connect({:dbname => 'doctors_office_tools'})
 RSpec.configure do |config|
   config.after(:each) do
     DB.exec("DELETE FROM patients *;")
+    DB.exec("DELETE FROM patients_doctors *;")
   end
 end
 
@@ -30,10 +31,17 @@ describe Patient do
   it 'saves a patient to the database' do
     test_patient.save
     expect(Patient.all).to eq [test_patient]
+    expect(test_patient.id).to be_an_instance_of Fixnum
   end
 
   it 'returns true if two patients have the same name and birthday' do
     test_patient2 = Patient.new('Bill Murray', '1999-01-08')
     expect(test_patient).to eq test_patient2
+  end
+
+  it 'should assign the patient to the given doctor' do
+    test_patient.save
+    test_patient.assign(1)
+    expect(test_patient.which_doctors?).to eq ([1])
   end
 end
