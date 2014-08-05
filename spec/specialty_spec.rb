@@ -15,4 +15,21 @@ describe Specialty do
     dermatology = Specialty.new("dermatology")
     expect(dermatology).to be_an_instance_of Specialty
   end
+
+  it 'return name of the specialty' do
+    dermatology = Specialty.new("dermatology")
+    expect(dermatology.specialty).to eq "dermatology"
+  end
+
+  it 'should start with no ids in database' do
+    dermatology = Specialty.new("dermatology")
+    expect(Specialty.all).to eq []
+  end
+
+  it 'should return all specialties in the database' do
+    dermatology = Specialty.new("dermatology")
+    dermatology.save
+    expect(Specialty.all).to eq [dermatology]
+  end
 end
+
